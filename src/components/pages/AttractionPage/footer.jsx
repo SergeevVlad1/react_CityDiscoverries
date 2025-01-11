@@ -25,17 +25,7 @@ const Footer = () => {
         <h1>© 2024 SityDiscoverires. All Rights Reserved. Design by @Vol0dy_a</h1>
       </div>
 
-      <div className="pagination">
-        <button className="previousBtn" id="prev-page">
-          Previous
-        </button>
-        <span className="currentPage" id="current-page">
-          1
-        </span>
-        <button className="nextBtn" id="next-page">
-          Next
-        </button>
-      </div>
+      
     </section>
   );
 };
