@@ -1,0 +1,40 @@
+.visit__text {
+  display: flex;
+  font-size: 12px;
+}
+
+.footer__contact {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.footer__icon {
+  max-width: 40px;
+  display: flex;
+}
+
+.visit__section {
+  display: grid;
+  grid-template-columns: 4fr 4fr 4fr;
+}
+
+.footer {
+  display: flex;
+  text-decoration: none;
+  list-style: none;
+}
+
+.visit__box1 {
+  display: flex;
+  background-color: #333;
+  border-radius: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.visit__text {
+  font-size: 10px;
+}

@@ -1,5 +1,5 @@
-import React from 'react';
-import preloaderGif from './AttractionPage/preloader/728.gif';    
+import React from "react";
+import preloaderGif from "./AttractionPage/preloader/728.gif";
 
 const Preloader = () => {
   return (

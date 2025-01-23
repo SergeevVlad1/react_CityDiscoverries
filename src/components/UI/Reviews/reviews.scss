@@ -1,0 +1,71 @@
+.Comments__container {
+  display: grid;
+  flex-direction: column;
+}
+
+.comment__block {
+  display: grid;
+  grid-template-columns: 4fr 4fr 4fr;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 475px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.comment__block:empty::after {
+  content: "Отзывов пока нет";
+  display: flex;
+  padding-top: 40px;
+  justify-content: center;
+  width: 300%;
+  @media (max-width: 500px) {
+    display: flex;
+    width: 100%;
+  }
+}
+
+.review {
+  gap: 30px;
+  background-color: #444;
+  border-radius: 10px;
+  border: 2px #000 solid;
+  padding: 10px;
+}
+
+.comments__form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  background-color: #444;
+  padding: 20px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  justify-content: center;
+
+  @media (max-width: 475px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.comments__text {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.comments__name {
+  display: flex;
+  padding: 20px;
+  border: #000;
+  border-radius: 10px;
+  align-items: center;
+  &:hover {
+    box-shadow: #fff 2px 2px 21px;
+  }
+}

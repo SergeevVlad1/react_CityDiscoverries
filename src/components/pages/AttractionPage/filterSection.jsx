@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const FilterSection = () => {
-    return ( 
-        <section className="filter">
+  return (
+    <section className="filter">
       <div className="filter__container">
         <div className="filter__main">
           <div className="filter__nav-content" id="filter__cont">
@@ -20,7 +20,7 @@ const FilterSection = () => {
         </div>
       </div>
     </section>
-     );
-}
- 
+  );
+};
+
 export default FilterSection;

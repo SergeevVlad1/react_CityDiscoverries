@@ -1,135 +1,174 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import Footer from './footer';
-import MySelect from '../../UI/select/MySelect';
-import Loader from '../../UI/Loader/Loader'; // Предположим, что у вас есть компонент Loader
+  import React, { useState, useEffect } from "react";
+  import { useQuery } from "@tanstack/react-query";
+  import axios from "axios";
+  import { data, useNavigate } from "react-router-dom";
+  import Footer from "./footer";
+  import MySelect from "../../UI/select/SortSelect";
+  import Loader from "../../UI/Loader/Loader";
+  import "./css/attraction.scss";
 
-const src = 'https://67320e867aaf2a9aff134756.mockapi.io/api/1/places';
+  const src = "https://6790a307af8442fd73770bf0.mockapi.io/attractions";
 
-const AttractionPage = () => {
-  const navigate = useNavigate();
+  const AttractionPage = () => {
+    const navigate = useNavigate();
 
-  // Состояния для сортировки, фильтрации, пагинации и поиска
-  const [page, setPage] = useState(1);
-  const [sort, setSort] = useState('name');
-  const [filter, setFilter] = useState('');
-  const [search, setSearch] = useState('');
-  const [selectedSort, setSelectedSort] = useState('');
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(6)
+    const [sort, setSort] = useState("name");
+    const [filter, setFilter] = useState("");
+    const [search, setSearch] = useState("");
+    const [tempSearch, setTempSearch] = useState("");
+    const [selectedSort, setSelectedSort] = useState("");
+    // {_}
+    const fetchArticles = async ({ queryKey }) => {
+      const [page, sort, filter, search, limit] = queryKey;
+      const response = await axios.get(src, {
+        params: {
+          page,
+          limit,
+          sortBy: sort,
+          filter,
+          search,
+        },
+      });
+      return response.data;
+    };
 
-  const fetchArticles = async ({ queryKey }) => {
-    const [_, { page, sort, filter, search }] = queryKey;
-    const response = await axios.get(src, {
-      params: {
-        page,
-        limit: 4,
-        sortBy: sort,
-        filter,
-        search,
-      },
+    const {
+      data: articles = [],
+      isLoading,
+      isError,
+      error,
+    } = useQuery({
+      queryKey: [page, sort, filter, search, limit],
+      queryFn: fetchArticles,
+      keepPreviousData: true,
+      staleTime: 1000 //милс * 60 //сек * 5 //мин,
     });
-    return response.data;
-  };
 
-  // Использование useQuery для получения данных
-  const {
-    data: articles,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ['places', { page, sort, filter, search }], // Ключ запроса с параметрами
-    queryFn: fetchArticles,
-    keepPreviousData: true, // Плавный переход между страницами
-    staleTime: 1000 * 60 * 5, // Кеширование данных на 5 минут
-  });
+    useEffect(() => {
+      if (!isLoading && articles.length === 0) {
+        setSearch("");
+        setSort("name");
+        setPage(1);
+        alert("Ничего не найдено");
+      }
+    }, [articles, isLoading]);
 
-  // Обработчики для изменения параметров
-  const handleSortChange = (sort) => {
-    setSelectedSort(sort);
-    setSort(sort);
-  };
+    const handleSortChange = (sort) => {
+      setSelectedSort(sort);
+      setSort(sort);
+    };
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
-  };
+    const handleFilterChange = (event) => {
+      const selectedFilter = event.target.value;
+      setFilter(selectedFilter);
+    };
 
-  const handleSearchChange = (event) => {
-    setSearch(event.target.value);
-  };
+    const handleTempSearchChange = (event) => {
+      setTempSearch(event.target.value);
+    };
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
+    const handleSearchClick = () => {
+      setSearch(tempSearch);
+      setPage(1);
+    };
 
-  if (isLoading) {
-    return <Loader />; // Используйте ваш компонент Loader
-  }
+    const handlePageChange = (newPage) => {
+      setPage(newPage);
+    };
 
-  if (isError) {
-    return <div>Error: {error.message}</div>;
-  }
+    if (isLoading) {
+      return <Loader />;
+    }
 
-  return (
-    <div>
-      <h1>Attractions:</h1>
+    if (isError) {
+      return <div>Error: {error.message}</div>;
+    }
 
-      <hr style={{ margin: '15px 0' }} />
+    const paginationMore = (event) => {
+      if (limit < 12) {
+      setLimit((limit) => limit + 6)
+      setPage(1)
+    }
+    else {
+      alert('Вы на последней странице')
+    }
+    }
 
-      <MySelect
-        value={selectedSort}
-        onChange={handleSortChange}
-        defaultValue="Сортировка по:"
-        options={[
-          { value: 'title', name: 'По названию' },
-          { value: 'body', name: 'По описанию' },
-        ]}
-      />
+    return (
+      <div className=" container">
+        <h1>Attractions:</h1>
 
-      <input
-        type="text"
-        placeholder="Фильтр"
-        value={filter}
-        onChange={handleFilterChange}
-      />
+        <div className="attraction">
+          <MySelect
+            className="attraction__select"
+            value={selectedSort}
+            onChange={handleSortChange}
+            defaultValue="Сортировка по:"
+            options={[
+              { value: "title", name: "По названию" },
+              { value: "body", name: "По описанию" },
+            ]}
+          />
 
-      <input
-        type="text"
-        placeholder="Поиск"
-        value={search}
-        onChange={handleSearchChange}
-      />
+          <select
+            className="attraction__select"
+            value={filter}
+            onChange={handleFilterChange}
+          >
+            <option value="">---</option>
+            <option value="category1">Музеи и Храмы</option>
+            <option value="category2">Парки</option>
+            <option value="category3">Популярные Достопримечательности</option>
+          </select>
 
-      {/* Отображение данных */}
-      {articles.map((article) => (
-        <div key={article.id} className="post">
-          <h2>{article.name}</h2>
-          <img className="attraction_img" src={article.imageUrl} alt="Img" />
-          <p>{article.description}</p>
-          <button onClick={() => navigate(`/attraction/${article.id}`)}>
-            Узнать больше
-          </button>
+          <div>
+            <input
+              className="attraction__select"
+              type="text"
+              placeholder="Поиск"
+              value={tempSearch}
+              onChange={handleTempSearchChange}
+            />
+          </div>
         </div>
-      ))}
 
-      {/* Пагинация */}
-      <div>
-        <button
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-        >
-          Назад
-        </button>
-        <span>Page: {page}</span>
-        <button onClick={() => handlePageChange(page + 1)}>Вперед</button>
-      </div>
+        <button onClick={handleSearchClick}>Найти</button>
+        <div className="attraction__posts">
+          {articles.map((article) => (
+            <div key={article.id} className="post">
+              <h2>{article.name}</h2>
+              <img
+                onClick={() => navigate(`/attraction/${article.id}`)}
+                className="post__ImageUrl"
+                src={article.imageUrl}
+                alt="Img"
+              />
+              <button onClick={() => navigate(`/attraction/${article.id}`)}>
+                Узнать больше
+              </button>
+            </div>
+          ))}
+        </div>
 
-      <div>
+        <div>
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
+          >
+            ⇦ Назад
+          </button>
+          <span>Page: {page}</span>
+          <button onClick={() => handlePageChange(page + 1)}>Вперед ⇨</button>
+        </div>
+        <div>
+          <button className="morePagination" onClick={() => paginationMore()}>Загрузить еще</button>
+        </div>
+
         <Footer />
       </div>
-    </div>
-  );
-};
+    );
+  };
 
-export default AttractionPage;
+  export default AttractionPage;

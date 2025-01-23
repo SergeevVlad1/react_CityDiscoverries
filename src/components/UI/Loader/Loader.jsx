@@ -1,9 +1,7 @@
-import React from "react";
+// import './components/pages/AttractionPage/AttractionPage/preloader/728.gif'
 
 const Loader = () => {
-    return ( 
-        <div>Loading...</div>
-     );
-}
- 
+  return <img src="https://media.tenor.com/On7kvXhzml4AAAAi/loading-gif.gif" alt="gif" />;
+};
+
 export default Loader;
