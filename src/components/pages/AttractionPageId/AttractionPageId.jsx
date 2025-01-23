@@ -39,7 +39,7 @@ const AttractionPageId = () => {
   };
 
   if (isLoading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   if (error || !post) {

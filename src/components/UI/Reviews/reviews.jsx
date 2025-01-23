@@ -34,6 +34,12 @@ function Reviews({ postId }) {
       return alert("Пожалуйста, заполните все обязательные поля.");
     if (rating > 5) return alert("Максимальная оценка 5");
     setIsSubmitting(true);
+    if (name.length > 25) {
+      return alert("Максимальная длина имени 25 символов");
+    }
+    if (text.length > 255) {
+      return alert("Максимальная длина имени 255 символов");
+    }
     try {
       const response = await fetch(`${baseUrl}${id}/comments/`, {
         method: "POST",
@@ -45,6 +51,7 @@ function Reviews({ postId }) {
       setReviews([...reviews, newReview]);
       setName("");
       setText("");
+      setRating("");
     } catch (error) {
       console.error("Ошибка при отправке отзыва:", error);
     } finally {
@@ -108,7 +115,7 @@ function Reviews({ postId }) {
             <div key={review.id} className="review">
               <p>
                 <strong>Имя: {review.name}</strong>
-              </p> 
+              </p>
               <p>Текст отзыва: {review.text}</p>
               <p>Ваша оценка: {review.rating}/5</p>
               <button onClick={() => deleteReview(review.id)}>Удалить</button>

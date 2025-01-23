@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.63.0",
@@ -45,5 +46,6 @@
     "*.{css,scss,json,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "homepage": "https://github.com/SergeevVlad1/react_CityDiscoverries.git"
 }
